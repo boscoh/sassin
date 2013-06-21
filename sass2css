@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import sys
+import os
+
+import indentedsass
+
+usage = '''
+An indented SASS stylesheet compiler.
+
+usage: sass2css sass [css]
+'''
+
+if len(sys.argv) < 2:
+  print usage
+  sys.exit(1)
+
+
+if not os.path.isfile(sys.argv[1]):
+  print "Error: {} not found".format(in_fname)
+  sys.exit(1)
+
+with open(sys.argv[1]) as f:
+  in_text = f.open().read()
+
+if indentedsass._scss_compiler:
+  out_text = indentedsass.compile_with_scss(in_text)
+else:
+  out_text = indentedsass.compile(in_text)
+
+if len(sys.argv[2]):
+  out_fname = sys.argv[2]
+  with open(out_fname, 'w') as f:
+    f.write(out_fname)
+else:
+  print out_text
+
