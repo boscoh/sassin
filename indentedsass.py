@@ -1,3 +1,10 @@
+# take from rapydcss https://bitbucket.org/pyjeon/rapydcss
+# Copyright (C) 2012  Alexander Tsepkov
+# GPL Version 3 license
+
+
+import StringIO
+
 
 # attempt to load PySCSS module
 try:
@@ -7,11 +14,7 @@ except:
   _scss_compiler = None
 
 
-import StringIO
 
-# take from rapydcss https://bitbucket.org/pyjeon/rapydcss
-# Copyright (C) 2012  Alexander Tsepkov
-# GPL Version 3 license
 def compile(sass):
   scss_buffer = StringIO.StringIO()
 
