@@ -1,21 +1,19 @@
 
-# INDENTEDSASS
+# Indented-SASS
 
-This is a indented-SASS to CSS compiler. It is a fork of  RapydCSS (https://bitbucket.org/pyjeon/rapydcss), with a more consistent API.
+Indented-SASS is a beautiful space-indented format designed to express CSS stylesheets. It is, in spirit and syntax, similar to the Javascript-based Stylus format. The difference is that indented-SASS can be compiled to CSS in the Python ecosystem.
 
-# What is SASS?
+This is a fork of [`RapydCSS`](https://bitbucket.org/pyjeon/rapydcss), with a API that will work with projects like HAMLPY.
 
-Indented-SASS is a  beautiful space-indented format to express CSS stylesheets.
+## What is indented-SASS?
 
-Okay this gets confusing. There is a Ruby program called SASS which used to compile a nice indented syntax for stylesheets into CSS. Let's call this the indented-SASS format. 
+Okay this gets confusing: there is a Ruby program called SASS which used to compile an indented syntax for stylesheets into CSS. Let's call this the indented-SASS format. 
 
-Indented-SASS used to be known as the SASS format, but SASS, the program, found that it was losing market share to LESS (another CSS extension format), and created the SCSS format. So SASS decided to deprecate the original indented-SASS format, and focus on the SCSS format. So now you have the case where SASS can compile indneted-SASS but would rather you compile SCSS. 
+Indented-SASS used to be known as the SASS format, but SASS, the program, found that it was losing market share to LESS (another CSS extension format). So SASS decided to deprecate indented-SASS and introduced the SCSS format. This lead to the situation where SASS preferably compiles SCSS, and can also compile deprecated SASS, but would rather not do so.
 
-But indented-SASS is a lovely format that fits well with other space-indented, formats such as YAML and HAML, and of course, Python. However, if you want to use indented-SASS in Python, it gets complicated. 
+However, indented-SASS is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. But it gets rather complicated if you want to use indented-SASS in Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the indented-SASS format, even though confusingly some of these libraries are called SASS.
 
-The good news is that quite a few native Python libraries have been written that can compile SCSS into CSS (PySCSS, libsass, SASS). The bad news is that none of these modules actually recognize the indented-SASS format.
-
-Anyway, I finally found a great little module RapydCSS that carries out this conversion. However, as the API is locked into the RapydScript project, I've forked it so that it behaves better with other projects.
+Happily, I found RapydCSS a handy indented-SASS compiler in Python. However, as the RapydCSS API is locked into the RapydScript project, I've forked it to provide an API to work easier with other Python projects.
 
 ## Installation
 
@@ -25,17 +23,26 @@ This installs the python module `indentedsass` in the standard default lbiraries
 
 As well an executable script is installed:
 
-   sass2css sass [optional_output]
+    sass2css sass [css]
 
-## Indented-SASS format in flat mode
+## Indented-SASS syntax
 
-The compilation provided by indentedsass is quite straightforward. It turns indented spaces into braces, and adds semicolons at the end fields.
+The compilation provided by indented-SASS is quite straightforward. It wraps indented spaces with curly braces, and adds semicolons at the end fields. What is great that this step is sufficient to turn indented-SASS into SCSS, and thus this module is sufficient to future-proof any deprecation of indented-SASS in the Ruby SASS program.
 
-If your indented-SASS file is flat (no nesting) and does not use any variables or mixins, then this compilation will give you CSS. If this is what you want to write, then you don't even need to install any of the Python SASS/SCSS modules.
+### Flat mode
 
-## Indented-SASS format using bells and whistles
+If your indented-SASS file is flat (no nesting) and does not use any variables or mixins, then this compilation will give you CSS, and you don't need any SCSS modules.
 
-But of course you should take advantage of the 
+
+## Indented-SASS with bells and whistles
+
+But of course you want to take advantage of the extensions of CSS provided by the indented-SASS format. Things like:
+
+  - variables
+  - mix-ins
+  - hierarchical nesting
+
+
 
 
 
