@@ -1,11 +1,11 @@
 
 # INDENTEDSASS
 
-This is a indented-SASS to CSS compiler. Indented-SASS is a  beautiful space-indented format to express CSS stylesheets.
-
-It is a fork of the RapydCSS progject (https://bitbucket.org/pyjeon/rapydcss) to provide a smoother API for other pojects.
+This is a indented-SASS to CSS compiler. It is a fork of  RapydCSS (https://bitbucket.org/pyjeon/rapydcss), with a more consistent API.
 
 # What is SASS?
+
+Indented-SASS is a  beautiful space-indented format to express CSS stylesheets.
 
 Okay this gets confusing. There is a Ruby program called SASS which used to compile a nice indented syntax for stylesheets into CSS. Let's call this the indented-SASS format. 
 
@@ -27,9 +27,17 @@ As well an executable script is installed:
 
    sass2css sass [optional_output]
 
-## Indented-SASS format
+## Indented-SASS format in flat mode
 
-### Flat mode.
+The compilation provided by indentedsass is quite straightforward. It turns indented spaces into braces, and adds semicolons at the end fields.
+
+If your indented-SASS file is flat (no nesting) and does not use any variables or mixins, then this compilation will give you CSS. If this is what you want to write, then you don't even need to install any of the Python SASS/SCSS modules.
+
+## Indented-SASS format using bells and whistles
+
+But of course you should take advantage of the 
+
+
 
 
 

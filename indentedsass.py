@@ -6,10 +6,12 @@
 import StringIO
 
 
-# attempt to load PySCSS module
+_scss_compiler = None
 try:
   import scss
-  _scss_compiler = scss.Scss()
+  # attempt to load PySCSS module
+  if 'Scss' in scss:
+    _scss_compiler = scss.Scss()
 except:
   _scss_compiler = None
 
