@@ -1,15 +1,17 @@
 
 # Indented-SASS
 
-Indented-SASS is a beautiful space-indented format designed to express CSS stylesheets. It is, in spirit and syntax, similar to the Javascript-based Stylus format. The difference is that indented-SASS can be compiled to CSS in the Python ecosystem.
+_This is a fork of [`RapydCSS`](https://bitbucket.org/pyjeon/rapydcss), with a modified API to work with projects like HAMLPY._
 
-This is a fork of [`RapydCSS`](https://bitbucket.org/pyjeon/rapydcss), with a API that will work with projects like HAMLPY.
+Indented-SASS is a beautiful space-indented format designed to express CSS stylesheets. It is, in spirit and syntax, similar to  Stylus. The difference is that indented-SASS can be compiled to CSS entirely within the Python ecosystem.
+
+
 
 ## What is indented-SASS?
 
 Okay this gets confusing: there is a Ruby program called SASS which used to compile an indented syntax for stylesheets into CSS. Let's call this the indented-SASS format. 
 
-Indented-SASS used to be known as the SASS format, but SASS, the program, found that it was losing market share to LESS (another CSS extension format). So SASS decided to deprecate indented-SASS and introduced the SCSS format. This lead to the situation where SASS preferably compiles SCSS, and can also compile deprecated SASS, but would rather not do so.
+Indented-SASS used to be known as the SASS format, but SASS, the program, found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. This lead to the situation where SASS preferably compiles SCSS, and can also compile deprecated SASS, but would rather not do so.
 
 However, indented-SASS is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. But it gets rather complicated if you want to use indented-SASS in Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the indented-SASS format, even though confusingly some of these libraries are called SASS.
 
@@ -27,25 +29,86 @@ As well an executable script is installed:
 
 ## Indented-SASS syntax
 
-The compilation provided by indented-SASS is quite straightforward. It wraps indented spaces with curly braces, and adds semicolons at the end fields. What is great that this step is sufficient to turn indented-SASS into SCSS, and thus this module is sufficient to future-proof any deprecation of indented-SASS in the Ruby SASS program.
+The compilation provided by indented-SASS is quite straightforward. It wraps indented spaces with curly braces, and adds semicolons at the end fields. What's great is that this is sufficient to turn indented-SASS into valid SCSS, and thus this module future-proofs indented-SASS from deprecation in the SASS/SCSS world.
 
-### Flat mode
+### Flat mode to CSS
 
-If your indented-SASS file is flat (no nesting) and does not use any variables or mixins, then this compilation will give you CSS, and you don't need any SCSS modules.
+If your indented-SASS file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then the plain `indented-SASS` compilation will give you valid CSS, without needing the SCSS module.
 
+    import indentedsass
+    s = '''
+    body
+      width: 500px
+    '''
+    print indentedsass.compile(s)
 
-## Indented-SASS with bells and whistles
+One nice extension of the original indented-SASS by RapydCSS is the line extension: if `\` is found at the end of the line, the following line becomes an extension of the original line (just like Python). 
 
-But of course you want to take advantage of the extensions of CSS provided by the indented-SASS format. Things like:
+    #container, #article_container, #sidebar_container, \
+    #footer_container, #useless_container
+       background-color: #DDD
 
-  - variables
-  - mix-ins
-  - hierarchical nesting
+One consequence means the `,` continuation in the original indented-SASS is no longer needed, and thus not supported.
 
+### Bells and whistles
 
+But of course you want to take advantage of the extensions of CSS provided by the indented-SASS format. 
 
+    import indentedsass
+    s = '''
+    body
+      width: 500px
+    '''
+    print indentedsass.compile_with_scss(s)
 
+You can use variables, prefaced by a `$`:
 
+    $highlight-color: #999
+    #big-box
+      border: 1px solid $highlight-color
+    #message
+      color: $highlight-color 
+
+Simple expressions:
+
+    $big-width: 500
+    #container
+      width: $big-width px
+    $panel-left
+      float: left
+      width: $big-width/2 px
+
+Mix-ins that group common elements, and can take arguments, which are prefaced by '@':
+
+    @mixin left($dist)
+      float: left
+      margin-left: $dist
+
+    #sidebar
+      @include left(10px) 
+      width: 200px
+
+Handy nesting, and self reference `&` to save even more typing:
+
+    #article
+      a
+        font:
+          family: Garamond
+        &:link
+          text-decoration: none
+        &:hover
+          text-decoration: underline
+
+Extend a class with a new twist:
+
+    #message:
+      border: 1px solid red
+
+    #bad-message:
+      @extends #message
+      background-color: red
+
+Imports and comments to be implemented
 
 
 

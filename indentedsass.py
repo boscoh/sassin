@@ -5,16 +5,36 @@
 
 import StringIO
 
+compile_scss = None
 
-_scss_compiler = None
-try:
-  import scss
-  # attempt to load PySCSS module
-  if 'Scss' in scss:
-    _scss_compiler = scss.Scss()
-except:
-  _scss_compiler = None
+# attempt to load PySCSS module
+if compile_scss is None:
+  try:
+    import scss
+    if 'Scss' in dir(scss):
+      compile_scss = scss.Scss(scss_opts={'compress':False}).compile
+  except:
+    compile_scss = None
 
+
+# attempt to load python-libsass module
+if compile_scss is None:
+  try:
+    import sass
+    if 'compile' in dir(sass):
+      compile_scss = lambda text: sass.compile(string=text)
+  except:
+    compile_scss = None
+
+
+# attempt to load python-scss module
+if compile_scss is None:
+  try:
+    import sass
+    if 'compile_string' in dir(sass):
+      compile_scss = sass.compile_string
+  except:
+    compile_scss = None
 
 
 def compile(sass):
@@ -29,7 +49,7 @@ def compile(sass):
   }
   
   # create a separate funtion for parsing the line so that we can call it again after the loop terminates
-  def parse_line(line, state):
+  def parse_line(line, i_line, state):
     line = state['line_buffer'] + line.rstrip() # remove EOL character
     if line and line[-1] == '\\':
       state['line_buffer'] = line[:-1]
@@ -44,6 +64,9 @@ def compile(sass):
       state['indent_marker'] = indent
   
     if state['indent_marker']:
+      check = indent % state['indent_marker']
+      if 0 < check < state['indent_marker']:
+        raise ValueError('Error: indentation not multiple of first indent, at line {}'.format(i_line))
       indent /= state['indent_marker']
   
     if indent == state['prev_indent']:
@@ -67,17 +90,17 @@ def compile(sass):
     state['prev_indent'] = indent
     state['prev_line'] = line
   
-  for input_line in sass.splitlines():
-    parse_line(input_line, state)
-  parse_line('\n', state) # parse the last line stored in prev_line buffer
+  for i_line, input_line in enumerate(sass.splitlines()):
+    parse_line(input_line, i_line, state)
+  parse_line('\n', i_line+1, state) # parse the last line stored in prev_line buffer
 
   return scss_buffer.getvalue()
 
 
 def compile_with_scss(sass):
-  if _scss_compiler is None:
+  if compile_scss is None:
     raise "Error: couldn't load a SCSS compiler"
   scss_text = compile(sass)
-  return _scss_compiler(scss_text)
+  return compile_scss(scss_text)
 
 

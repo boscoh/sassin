@@ -20,18 +20,23 @@ if not os.path.isfile(sys.argv[1]):
   print "Error: {} not found".format(in_fname)
   sys.exit(1)
 
-with open(sys.argv[1]) as f:
-  in_text = f.open().read()
+sass = sys.argv[1]
+with open(sass) as f:
+  in_text = f.read()
 
-if indentedsass._scss_compiler:
-  out_text = indentedsass.compile_with_scss(in_text)
+if indentedsass.compile_scss:
+  out_text = indentedsass.compile(in_text)
+  scss = os.path.splitext(sass)[0] + '.scss'
+  with open(scss, 'w') as f:
+    f.write(out_text)
+  out_text = indentedsass.compile_scss(out_text)
 else:
   out_text = indentedsass.compile(in_text)
 
-if len(sys.argv[2]):
+if len(sys.argv) > 2:
   out_fname = sys.argv[2]
   with open(out_fname, 'w') as f:
-    f.write(out_fname)
+    f.write(out_text)
 else:
   print out_text
 
