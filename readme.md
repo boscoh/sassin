@@ -35,12 +35,17 @@ The compilation provided by indented-SASS is quite straightforward. It wraps ind
 
 If your indented-SASS file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then the plain `indented-SASS` compilation will give you valid CSS, without needing the SCSS module.
 
+    :::python
     import indentedsass
+    
     s = '''
     body
       width: 500px
     '''
+    
     print indentedsass.compile(s)
+
+### Line extensions
 
 As per the original indented-SASS syntax, lines ending with `,` will be continued to the next line:
 
@@ -48,24 +53,44 @@ As per the original indented-SASS syntax, lines ending with `,` will be continue
     #footer_container, #useless_container
       background-color: #DDD
 
-That first line is treated is one whole line.
+That first line is treated is one whole line:
 
-Comments are prefaced with `/*` and only the front needs to be used. Currently, this is implemented on a per-line basis:
+    #container, #article_container, #sidebar_container #footer_container, #useless_container {
+      background-color: #DDD; }
 
-    /* this is a comment
+### Comments
+
+Comments are prefaced with `/*` will be treated as a comment, this this is implemented on a per-line basis:
+
+    /* This is a comment
+    /* This is another comment
     body
       width: 50px
 
+Will give:
+
+    /* This is a comment */
+    /* This is another comment */
+    body {
+      width: 500px; }
+
 ### Bells and whistles
 
-But of course you want to take advantage of the extensions of CSS provided by the indented-SASS format. 
+But of course you want to take advantage of the extensions introduced by SASS. This will require that you install the `PySCSS` module, and the compilation to be called from:
 
+    :::python
     import indentedsass
+    
     s = '''
+    @mixin box($width)
+      width: $width px
     body
-      width: 500px
+      @include box(500)
     '''
+    
     print indentedsass.compile_with_scss(s)
+
+### Variable substitution
 
 You can use variables, prefaced by a `$`:
 
@@ -74,6 +99,17 @@ You can use variables, prefaced by a `$`:
       border: 1px solid $highlight-color
     #message
       color: $highlight-color 
+
+Which makes it much easier to pass colors around, as in the resultant CSS: 
+
+    #big-box {
+      border: 1px solid #999999;
+    }
+    #message {
+      color: #999999;
+    }
+
+### Expressions
 
 Simple expressions:
 
@@ -84,6 +120,8 @@ Simple expressions:
       float: left
       width: $big-width/2 px
 
+### Mix-ins with arguments
+
 Mix-ins that group common elements, and can take arguments, which are prefaced by '@':
 
     @mixin left($dist)
@@ -93,6 +131,16 @@ Mix-ins that group common elements, and can take arguments, which are prefaced b
     #sidebar
       @include left(10px) 
       width: 200px
+
+Gives:
+
+    #sidebar {
+      float: left;
+      margin-left: 10px;
+      width: 200px;
+    }
+
+### Nesting
 
 Handy nesting, and self reference `&` to save even more typing:
 
@@ -105,14 +153,38 @@ Handy nesting, and self reference `&` to save even more typing:
         &:hover
           text-decoration: underline
 
+Flattens out into:
+
+    #article a {
+      font-family: Garamond;
+    }
+    #article a:link {
+      text-decoration: none;
+    }
+    #article a:hover {
+      text-decoration: underline;
+    }
+
+### Class Extensions
+
 Extend a class with a new twist:
 
-    #message:
+    #message
       border: 1px solid red
 
-    #bad-message:
-      @extends #message
+    #bad-message
+      @extend #message
       background-color: red
+
+Creates a similar class quite easily:
+
+    #bad-message, #message {
+      border: 1px solid #ff0000;
+    }
+    #bad-message {
+      background-color: #ff0000;
+    }
+
 
 Imports to be implemented
 
