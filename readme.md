@@ -44,7 +44,8 @@ If your indented-SASS file does not use any of the bells and whistles below (var
     '''
     
     print indentedsass.compile(s)
-
+    ```
+    
 ### Line extensions
 
 As per the original indented-SASS syntax, lines ending with `,` will be continued to the next line:
@@ -87,7 +88,8 @@ But of course you want to take advantage of the extensions introduced by SASS. T
     body
       @include box(500)
     '''
-    
+    ```
+
     print indentedsass.compile_with_scss(s)
 
 ### Variable substitution
