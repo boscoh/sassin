@@ -35,7 +35,7 @@ The compilation provided by indented-SASS is quite straightforward. It wraps ind
 
 If your indented-SASS file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then the plain `indented-SASS` compilation will give you valid CSS, without needing the SCSS module.
 
-    :::python
+    ```python
     import indentedsass
     
     s = '''
@@ -78,7 +78,7 @@ Will give:
 
 But of course you want to take advantage of the extensions introduced by SASS. This will require that you install the `PySCSS` module, and the compilation to be called from:
 
-    :::python
+    ```python
     import indentedsass
     
     s = '''
