@@ -60,10 +60,10 @@ That first line is treated is one whole line:
 
 ### Comments
 
-Comments are prefaced with `/*` will be treated as a comment, this this is implemented on a per-line basis:
+Comments are prefaced with `/` will be treated as a comment, and this is implemented on a per-line basis:
 
-    /* This is a comment
-    /* This is another comment
+    / This is a comment
+    / This is another comment
     body
       width: 50px
 
@@ -119,6 +119,16 @@ Simple expressions:
     $panel-left
       float: left
       width: $big-width/2 px
+
+And we get, in the CSS:
+
+    #container {
+      width: 500 px;
+    }
+    $panel-left {
+      float: left;
+      width: 250 px;
+    }
 
 ### Mix-ins with arguments
 

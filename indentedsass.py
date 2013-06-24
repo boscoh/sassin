@@ -34,11 +34,13 @@ def compile(sass):
     else:
       state['line_buffer'] = ''
 
-    is_comment = state['prev_line'].strip().startswith('/*')
+    is_comment = state['prev_line'].strip().startswith('/')
     if is_comment:
       text = state['prev_line'].rstrip()
       if not text.endswith('*/'):
         state['prev_line'] = text + ' */'
+      if not text.startswith('/*'):
+        state['prev_line'] = '/*' + state['prev_line'][1:]
     elif '/*' in state['prev_line']:
       raise ValueError("Error: comment '/*' found in the middle of line {}".format(i_line))
 
