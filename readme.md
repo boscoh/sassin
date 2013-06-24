@@ -42,13 +42,19 @@ If your indented-SASS file does not use any of the bells and whistles below (var
     '''
     print indentedsass.compile(s)
 
-One nice extension of the original indented-SASS by RapydCSS is the line extension: if `\` is found at the end of the line, the following line becomes an extension of the original line (just like Python). 
+As per the original indented-SASS syntax, lines ending with `,` will be continued to the next line:
 
-    #container, #article_container, #sidebar_container, \
+    #container, #article_container, #sidebar_container,
     #footer_container, #useless_container
-       background-color: #DDD
+      background-color: #DDD
 
-One consequence means the `,` continuation in the original indented-SASS is no longer needed, and thus not supported.
+That first line is treated is one whole line.
+
+Comments are prefaced with `/*` and only the front needs to be used. Currently, this is implemented on a per-line basis:
+
+    /* this is a comment
+    body
+      width: 50px
 
 ### Bells and whistles
 
