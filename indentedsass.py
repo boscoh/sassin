@@ -1,6 +1,5 @@
-# take from rapydcss https://bitbucket.org/pyjeon/rapydcss
-# Copyright (C) 2012  Alexander Tsepkov
-# GPL Version 3 license
+# forked from rapydcss https://bitbucket.org/pyjeon/rapydcss
+# Portion (C) 2012  Alexander Tsepkov
 
 
 import StringIO
@@ -15,7 +14,7 @@ except:
 
 
 def compile(sass):
-  scss_buffer = StringIO.StringIO()
+  output_buffer = StringIO.StringIO()
 
   state = {
     'indent_mark': 0,
@@ -34,15 +33,11 @@ def compile(sass):
     else:
       state['line_buffer'] = ''
 
-    is_comment = state['prev_line'].strip().startswith('/')
+    is_comment = state['prev_line'].strip().startswith('/*')
     if is_comment:
       text = state['prev_line'].rstrip()
       if not text.endswith('*/'):
         state['prev_line'] = text + ' */'
-      if not text.startswith('/*'):
-        state['prev_line'] = '/*' + state['prev_line'][1:]
-    elif '/*' in state['prev_line']:
-      raise ValueError("Error: comment '/*' found in the middle of line {}".format(i_line))
 
     indent = len(line) - len(line.lstrip())
    
@@ -72,7 +67,7 @@ def compile(sass):
       state['nested_blocks'] -= block_diff
 
     if state['prev_line']:
-      scss_buffer.write(state['prev_line'] + '\n')
+      output_buffer.write(state['prev_line'] + '\n')
 
     state['prev_indent'] = indent
     state['prev_line'] = line
@@ -82,7 +77,7 @@ def compile(sass):
       parse_line(input_line, i_line, state)
   parse_line('\n', i_line+1, state) # parse the last line stored in prev_line buffer
 
-  return scss_buffer.getvalue()
+  return output_buffer.getvalue()
 
 
 def compile_with_scss(sass):

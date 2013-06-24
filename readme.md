@@ -1,39 +1,34 @@
 
-# Indented-SASS
+# inSASS
 
-_This is a fork of [`RapydCSS`](https://bitbucket.org/pyjeon/rapydcss), with a modified API to work with projects like HAMLPY._
+`inSASS` compiles the indented-SASS-syntax format, a beautiful space-indented format used to express CSS stylesheets. This format is similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `inSASS` works entirely in the Python ecosystem.
 
-Indented-SASS is a beautiful space-indented format designed to express CSS stylesheets. It is, in spirit and syntax, similar to  Stylus. The difference is that indented-SASS can be compiled to CSS entirely within the Python ecosystem.
-
-
-
-## What is indented-SASS?
-
-Okay this gets confusing: there is a Ruby program called SASS which used to compile an indented syntax for stylesheets into CSS. Let's call this the indented-SASS format. 
-
-Indented-SASS used to be known as the SASS format, but SASS, the program, found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. This lead to the situation where SASS preferably compiles SCSS, and can also compile deprecated SASS, but would rather not do so.
-
-However, indented-SASS is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. But it gets rather complicated if you want to use indented-SASS in Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the indented-SASS format, even though confusingly some of these libraries are called SASS.
-
-Happily, I found RapydCSS a handy indented-SASS compiler in Python. However, as the RapydCSS API is locked into the RapydScript project, I've forked it to provide an API to work easier with other Python projects.
+_This is a fork of [RapydCSS](https://bitbucket.org/pyjeon/rapydcss)._
 
 ## Installation
 
     pip install indentedsass
 
-This installs the python module `indentedsass` in the standard default lbiraries. 
-
-As well an executable script is installed:
+This has one dependency `PySCSS` which should be automatically installed by pip. As well an executable script is installed:
 
     sass2css sass [css]
 
-## Indented-SASS syntax
 
-The compilation provided by indented-SASS is quite straightforward. It wraps indented spaces with curly braces, and adds semicolons at the end fields. What's great is that this is sufficient to turn indented-SASS into valid SCSS, and thus this module future-proofs indented-SASS from deprecation in the SASS/SCSS world.
+## What is inSASS?
 
-### Flat mode to CSS
+Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. However, SASS (the program) found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. So SASS (the program) decided to deprecate SASS (the syntax) and focus on SCSS (the format). That's why, given this confusion, we use `inSASS` to describe the original indented-syntax format of SASS.
 
-If your indented-SASS file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then the plain `indented-SASS` compilation will give you valid CSS, without needing the SCSS module.
+However, `inSASS` is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the `inSASS` format, even though confusingly some of these libraries also use SASS in their name.
+
+Happily, I found RapydCSS, a handy little `inSASS` compiler in Python. Because RapydCSS has a rather idiosyncratic API, I forked it to make some changes that help `inSASS` work better with other Python projects, such as HAMLPY.
+
+## inSASS syntax in flat mode
+
+`inSASS` tries to follow the [original indented syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) of SASS. 
+
+The compilation provided by `inSASS` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `inSASS` into valid SCSS, and thus future-proofs `inSASS` from deprecation in the SASS/SCSS world.
+
+If your `inSASS` file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
 
     import indentedsass
 
@@ -46,7 +41,7 @@ If your indented-SASS file does not use any of the bells and whistles below (var
 
 ### Line extensions
 
-As per the original indented-SASS syntax, lines ending with `,` will be continued to the next line:
+Lines ending with `,` will be continued to the next line:
 
     #container, #article_container, #sidebar_container,
     #footer_container, #useless_container
@@ -59,23 +54,25 @@ That first line is treated is one whole line:
 
 ### Comments
 
-Comments are prefaced with `/` will be treated as a comment, and this is implemented on a per-line basis:
+Comments are prefaced with `/*` and is implemented on a per-line basis:
 
-    / This is a comment
-    / This is another comment
+    /* This is a comment
+    /* This is another comment
     body
-      width: 50px
+      /* Yep, a short width
+      width: 50px 
 
 Will give:
 
     /* This is a comment */
     /* This is another comment */
     body {
-      width: 500px; }
+      /* Yep, a short width */
+      width: 50px; }
 
-### Bells and whistles
+## Syntax extensions of inSASS requiring PySCSS
 
-But of course you want to take advantage of the extensions introduced by SASS. This will require that you install the `PySCSS` module, and the compilation to be called from:
+But of course you want to take advantage of the programmatic syntax extensions introduced by SASS. This will require that you pre-install the `PySCSS` module, and the compilation is then:
 
     import indentedsass
 
@@ -109,7 +106,7 @@ Which makes it much easier to pass colors around, as in the resultant CSS:
 
 ### Expressions
 
-Simple expressions:
+Cobble together simple expressions:
 
     $big-width: 500
     #container
@@ -134,18 +131,20 @@ Mix-ins that group common elements, and can take arguments, which are prefaced b
 
     @mixin left($dist)
       float: left
-      margin-left: $dist
+      margin-left: -$dist
+      width: $dist - 20
+      padding-right: 20
 
     #sidebar
-      @include left(10px) 
-      width: 200px
+      @include left(200px) 
 
 Gives:
 
     #sidebar {
       float: left;
-      margin-left: 10px;
-      width: 200px;
+      margin-left: -200px;
+      width: 180px;
+      padding-right: 20;
     }
 
 ### Nesting
