@@ -17,26 +17,6 @@ if compile_scss is None:
     compile_scss = None
 
 
-# attempt to load python-libsass module
-if compile_scss is None:
-  try:
-    import sass
-    if 'compile' in dir(sass):
-      compile_scss = lambda text: sass.compile(string=text)
-  except:
-    compile_scss = None
-
-
-# attempt to load python-scss module
-if compile_scss is None:
-  try:
-    import sass
-    if 'compile_string' in dir(sass):
-      compile_scss = sass.compile_string
-  except:
-    compile_scss = None
-
-
 def compile(sass):
   scss_buffer = StringIO.StringIO()
 

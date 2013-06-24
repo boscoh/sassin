@@ -114,7 +114,7 @@ Extend a class with a new twist:
       @extends #message
       background-color: red
 
-Imports and comments to be implemented
+Imports to be implemented
 
 
 
