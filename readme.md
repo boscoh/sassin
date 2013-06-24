@@ -37,15 +37,13 @@ If your indented-SASS file does not use any of the bells and whistles below (var
 
     ```python
     import indentedsass
-    
     s = '''
     body
       width: 500px
     '''
-    
     print indentedsass.compile(s)
     ```
-    
+
 ### Line extensions
 
 As per the original indented-SASS syntax, lines ending with `,` will be continued to the next line:
@@ -81,16 +79,14 @@ But of course you want to take advantage of the extensions introduced by SASS. T
 
     ```python
     import indentedsass
-    
     s = '''
     @mixin box($width)
       width: $width px
     body
       @include box(500)
     '''
-    ```
-
     print indentedsass.compile_with_scss(s)
+    ```
 
 ### Variable substitution
 
