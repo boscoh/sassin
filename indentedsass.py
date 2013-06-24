@@ -5,16 +5,13 @@
 
 import StringIO
 
-compile_scss = None
-
 # attempt to load PySCSS module
-if compile_scss is None:
-  try:
-    import scss
-    if 'Scss' in dir(scss):
-      compile_scss = scss.Scss(scss_opts={'compress':False}).compile
-  except:
-    compile_scss = None
+try:
+  import scss
+  if 'Scss' in dir(scss):
+    compile_scss = scss.Scss(scss_opts={'compress':False}).compile
+except:
+  compile_scss = None
 
 
 def compile(sass):
