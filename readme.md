@@ -1,7 +1,7 @@
 
 # sassin
 
-`sassin` compiles the indented-SASS-syntax format into CSS stylesheets. This is a beautiful space-indented format, similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `sassin` works entirely in the Python ecosystem.
+`sassin` compiles SASS-indented-syntax into CSS. This is a beautiful space-indented format, similar to Javascript's [Stylus](http://learnboost.github.io/stylus/), but `sassin` works entirely in the Python ecosystem.
 
 ## Installation
 
@@ -11,25 +11,25 @@ This has one dependency `PySCSS` which should be automatically installed by pip.
 
     sassin sass [css]
 
-Indented-SASS-syntax files are recognized by a `.sass` extension.
+SASS-indented-syntax files are recognized by a `.sass` extension.
 
-## What is the indented-SASS-syntax?
+## What is the SASS-indented-syntax?
 
-Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. For clarity, let's call it the indented-SASS-syntax.
+Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. For clarity, let's call it the SASS-indented-syntax.
 
 However, SASS (the program) found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. So SASS (the program) decided to deprecate SASS (the syntax) and focus on SCSS (the format). 
 
-Nevertheless, the indented-SASS-syntax is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the indented-SASS-syntax format, even though confusingly some of these libraries also use SASS in their name.
+Nevertheless, the SASS-indented-syntax is a format that fits well with other space-indented formats such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the SASS-indented-syntax format, even though confusingly some of these libraries also use SASS in their name.
 
 What to do if you're a Pythonista who wants to SASS?
 
-## Basic indented-SASS-syntax compilation
+## Basic SASS-indented-syntax compilation
 
-`sassin` is an [indented-SASS-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) compiler into SCSS. It is based on the ([RapydCSS]((https://bitbucket.org/pyjeon/rapydcss)) compiler, but made more consistent with the indented-SASS-syntax and tweaked to work better with other Python projects, such as HAMLPY.
+`sassin` essentially compiles SASS-indented-syntax into SCSS. It is based on the [RapydCSS](https://bitbucket.org/pyjeon/rapydcss) compiler, but made more consistent with the official [SASS-indented-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) and tweaked to work better with other Python projects, such as HAMLPY.
 
-The compilation provided by `sassin` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `sassin` into valid SCSS, and thus future-proofs the indented-SASS-syntax from deprecation.
+The essential compilation provided by `sassin` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `sassin` into valid SCSS, and thus future-proofs the SASS-indented-syntax from deprecation.
 
-If your indented-SASS-syntax file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
+If your SASS-indented-syntax file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
 
     import sassin
 
@@ -75,7 +75,7 @@ Will give:
 
 ### Imports
 
-A handy little command is `@import` that - surprise surprise - imports an external `sassin` file into the current `sassin` file.
+A handy little command is `@import` that - surprise surprise - imports an external `.sass` file into the current `.sass` file.
 
 So let's say you have a `night.sass`:
 
@@ -158,6 +158,8 @@ And we get, in the CSS:
       float: left;
       width: 250 px;
     }
+
+Just beware that `/` will be intrepreted as a division expression, so if `/` appears in `url()` parameters, wrap it with quotation marks `""`.
 
 ### Mix-ins with arguments
 
