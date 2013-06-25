@@ -8,7 +8,7 @@ import insass
 usage = '''
 An indented SASS stylesheet compiler.
 
-usage: sass2css sass [css]
+usage: sassindent sass [css]
 '''
 
 if len(sys.argv) < 2:

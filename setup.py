@@ -6,14 +6,9 @@ from setuptools.command import sdist
 del sdist.finders[:]
 
 description = \
-"""IndentedSASS is a Python compiler for SASS indented syntax
-file to SCSS. This is a fork of Rapydcss, with
-a cleaner API to interact with modules such as HAMLPY.
-
-In the case where no SCSS extensions are used,
-it compiles to straight CSS. 
-
-Docs at http://github.com/boscoh/indentedsass.
+"""`sassindent` is a Python compiler for indented-SASS-syntax
+files fpr CSS stylesheets. The full syntax requires `PySCSS`, but a limited syntax
+compiles straight to cSS. Docs at http://github.com/boscoh/indentedsass.
 """
 
 setup(
@@ -21,13 +16,11 @@ setup(
     version='0.1',
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
-    url='http://github.com/boscoh/indentedsass',
+    url='http://github.com/boscoh/sassindent',
     description='Static site generator',
     long_description=description,
     license='GPLv3',
-    install_requires=[
-        'pyscss',
-    ],
-    py_modules=['indentedsass',],
-    scripts=['sass2css'],
+    install_requires=['pyscss'],
+    py_modules=['sassindent',],
+    scripts=['sassindent'],
 )

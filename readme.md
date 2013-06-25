@@ -11,7 +11,7 @@ _This is a fork of [RapydCSS](https://bitbucket.org/pyjeon/rapydcss)._
 
 This has one dependency `PySCSS` which should be automatically installed by pip. As well an executable script is installed:
 
-    sass2css sass [css]
+    sassindent sass [css]
 
 
 ## What is sassindent?
