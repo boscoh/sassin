@@ -1,7 +1,7 @@
 # forked from rapydcss https://bitbucket.org/pyjeon/rapydcss
 # Portion (C) 2012  Alexander Tsepkov
 
-
+import os
 import StringIO
 
 # attempt to load PySCSS module
@@ -13,7 +13,7 @@ except:
   compile_scss = None
 
 
-def compile(sass):
+def compile(sass, source_fname=''):
   output_buffer = StringIO.StringIO()
 
   state = {
@@ -48,11 +48,18 @@ def compile(sass):
     if state['indent_mark']:
       check = indent % state['indent_mark']
       if 0 < check < state['indent_mark']:
-        raise ValueError('Error: indentation not multiple of first indent, at line {}'.format(i_line))
+        raise ValueError('Error: indentation not multiple of first indent, at {0}:{1}'.format(i_line, source_fname))
       indent /= state['indent_mark']
   
     if indent == state['prev_indent']:
-      if not is_comment and state['prev_line']:
+      if '@import' in state['prev_line']:
+        import_fname = state['prev_line'].split()[1]
+        if import_fname.startswith('"'):
+          import_fname = import_fname[1:-1]
+        if not os.path.isfile(import_fname):
+          raise IOError('Error: @import {0} not found at {1}:{2}'.format(import_fname, source_fname, i_line))
+        state['prev_line'] = compile_from_file(import_fname)
+      elif not is_comment and state['prev_line']:
         state['prev_line'] += ';'
     elif indent > state['prev_indent']:
       # new indentation is greater than previous, we just entered a new block
@@ -78,6 +85,12 @@ def compile(sass):
   parse_line('\n', i_line+1, state) # parse the last line stored in prev_line buffer
 
   return output_buffer.getvalue()
+
+
+def compile_from_file(sass_fname):
+  with open(sass_fname) as f:
+    sass_text = f.read()
+  return compile(sass_text, source_fname=sass_fname)
 
 
 def compile_with_scss(sass):

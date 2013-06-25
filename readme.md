@@ -1,43 +1,43 @@
 
-# inSASS
+# sassindent
 
-`inSASS` compiles the indented-SASS-syntax format, a beautiful space-indented format used to express CSS stylesheets. This format is similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `inSASS` works entirely in the Python ecosystem.
+`sassindent` compiles the indented-SASS-syntax format, a beautiful space-indented format used to express CSS stylesheets. This format is similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `sassindent` works entirely in the Python ecosystem.
 
 _This is a fork of [RapydCSS](https://bitbucket.org/pyjeon/rapydcss)._
 
 ## Installation
 
-    pip install indentedsass
+    pip install sassindent
 
 This has one dependency `PySCSS` which should be automatically installed by pip. As well an executable script is installed:
 
     sass2css sass [css]
 
 
-## What is inSASS?
+## What is sassindent?
 
-Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. However, SASS (the program) found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. So SASS (the program) decided to deprecate SASS (the syntax) and focus on SCSS (the format). That's why, given this confusion, we use `inSASS` to describe the original indented-syntax format of SASS.
+Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. However, SASS (the program) found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. So SASS (the program) decided to deprecate SASS (the syntax) and focus on SCSS (the format). That's why, given this confusion, we use `sassindent` to describe the original indented-syntax format of SASS.
 
-However, `inSASS` is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the `inSASS` format, even though confusingly some of these libraries also use SASS in their name.
+However, `sassindent` is a lovely format that fits well with other space-indented formats, such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the `sassindent` format, even though confusingly some of these libraries also use SASS in their name.
 
-Happily, I found RapydCSS, a handy little `inSASS` compiler in Python. Because RapydCSS has a rather idiosyncratic API, I forked it to make some changes that help `inSASS` work better with other Python projects, such as HAMLPY.
+Happily, I found RapydCSS, a handy little `sassindent` compiler in Python. Because RapydCSS has a rather idiosyncratic API, I forked it to make some changes that help `sassindent` work better with other Python projects, such as HAMLPY.
 
-## inSASS syntax in flat mode
+## sassindent syntax in flat mode
 
-`inSASS` tries to follow the [original indented syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) of SASS. 
+`sassindent` tries to follow the [original indented syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) of SASS. 
 
-The compilation provided by `inSASS` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `inSASS` into valid SCSS, and thus future-proofs `inSASS` from deprecation in the SASS/SCSS world.
+The compilation provided by `sassindent` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `sassindent` into valid SCSS, and thus future-proofs `sassindent` from deprecation in the SASS/SCSS world.
 
-If your `inSASS` file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
+If your `sassindent` file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
 
-    import indentedsass
+    import sassindent
 
     s = '''
     body
       width: 500px
     '''
 
-    print indentedsass.compile(s)
+    print sassindent.compile(s)
 
 ### Line extensions
 
@@ -70,11 +70,42 @@ Will give:
       /* Yep, a short width */
       width: 50px; }
 
-## Syntax extensions of inSASS requiring PySCSS
+### Imports
+
+A handy little command is `@import` that - surprise surprise - imports an external `sassindent` file into the current `sassindent` file.
+
+So let's say you have a `night.sass`:
+
+    body
+      background-color: black
+      color: white
+
+Then in your file `style.sass`:
+
+    @import night.sass
+
+    #sunny-message
+       background-color: white
+       color: yellow
+
+Which produces:
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+    }
+    #sunny-message {
+      background-color: #ffffff;
+      color: #ffff00;
+    }
+
+`sassindent` looks for the filenames relative to the current working directory. Please don't abuse the imports, it doesn't check for circular imports - that would be your bad.
+
+## Syntax extensions of sassindent requiring PySCSS
 
 But of course you want to take advantage of the programmatic syntax extensions introduced by SASS. This will require that you pre-install the `PySCSS` module, and the compilation is then:
 
-    import indentedsass
+    import sassindent
 
     s = '''
     @mixin box($width)
@@ -83,7 +114,7 @@ But of course you want to take advantage of the programmatic syntax extensions i
       @include box(500)
     '''
 
-    print indentedsass.compile_with_scss(s)
+    print sassindent.compile_with_scss(s)
 
 ### Variable substitution
 
@@ -193,7 +224,6 @@ Creates a similar class quite easily:
     }
 
 
-Imports to be implemented
 
 
 

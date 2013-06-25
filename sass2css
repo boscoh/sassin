@@ -3,7 +3,7 @@
 import sys
 import os
 
-import indentedsass
+import insass
 
 usage = '''
 An indented SASS stylesheet compiler.
@@ -24,14 +24,14 @@ sass = sys.argv[1]
 with open(sass) as f:
   in_text = f.read()
 
-if indentedsass.compile_scss:
-  out_text = indentedsass.compile(in_text)
+if insass.compile_scss:
+  out_text = insass.compile(in_text)
   scss = os.path.splitext(sass)[0] + '.scss'
   with open(scss, 'w') as f:
     f.write(out_text)
-  out_text = indentedsass.compile_scss(out_text)
+  out_text = insass.compile_scss(out_text)
 else:
-  out_text = indentedsass.compile(in_text)
+  out_text = insass.compile(in_text)
 
 if len(sys.argv) > 2:
   out_fname = sys.argv[2]
