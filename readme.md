@@ -1,7 +1,7 @@
 
 # sassin
 
-`sassin` compiles the indented-SASS-syntax format, a beautiful space-indented format, into CSS stylesheets. This format is similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `sassin` works entirely in the Python ecosystem.
+`sassin` compiles the indented-SASS-syntax format into CSS stylesheets. This is a beautiful space-indented format, similar to the Javascript-based [Stylus](http://learnboost.github.io/stylus/) format, but `sassin` works entirely in the Python ecosystem.
 
 ## Installation
 

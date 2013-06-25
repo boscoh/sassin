@@ -3,12 +3,12 @@
 import sys
 import os
 
-import insass
+import sassin
 
 usage = '''
 An indented SASS stylesheet compiler.
 
-usage: sassindent sass [css]
+usage: sassin sass [css]
 '''
 
 if len(sys.argv) < 2:
@@ -24,14 +24,14 @@ sass = sys.argv[1]
 with open(sass) as f:
   in_text = f.read()
 
-if insass.compile_scss:
-  out_text = insass.compile(in_text)
+if sassin.compile_scss:
+  out_text = sassin.compile(in_text)
   scss = os.path.splitext(sass)[0] + '.scss'
   with open(scss, 'w') as f:
     f.write(out_text)
-  out_text = insass.compile_scss(out_text)
+  out_text = sassin.compile_scss(out_text)
 else:
-  out_text = insass.compile(in_text)
+  out_text = sassin.compile(in_text)
 
 if len(sys.argv) > 2:
   out_fname = sys.argv[2]
