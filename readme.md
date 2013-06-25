@@ -25,7 +25,7 @@ What to do if you're a Pythonista who wants to SASS?
 
 ## Basic indented-SASS-syntax compilation
 
-`sassin` is an [indented-SASS-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) compiler into SCSS. It is based on the [RapydCSS]((https://bitbucket.org/pyjeon/rapydcss)) compiler, but made more consistent with the indented-SASS-syntax and tweaked to work better with other Python projects, such as HAMLPY.
+`sassin` is an [indented-SASS-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html) compiler into SCSS. It is based on the ([RapydCSS]((https://bitbucket.org/pyjeon/rapydcss)) compiler, but made more consistent with the indented-SASS-syntax and tweaked to work better with other Python projects, such as HAMLPY.
 
 The compilation provided by `sassin` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `sassin` into valid SCSS, and thus future-proofs the indented-SASS-syntax from deprecation.
 
