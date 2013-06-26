@@ -62,23 +62,26 @@ def compile(sass, source_fname=''):
       # indentation is shorter than previous: exit out of block
       if not is_comment and state['prev_line']:
         state['prev_line'] += ';'
-      while state['prev_indents'] != [] \
-          and indent < sum(state['prev_indents']):
-        if sum(state['prev_indents']) < indent:
-          raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
+      # pull off prev_indents one-by-one and add a }
+      while len(state['prev_indents']) and indent < sum(state['prev_indents']):
         state['prev_indents'].pop()
+        if sum(state['prev_indents']) < indent:
+          raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line+1))
         state['prev_line'] += ' }' 
 
     if state['prev_line']:
       i = state['first_indent']
+      left_padding = state['prev_line'][:i]
+      if left_padding.strip():
+          raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
       output_buffer.write(state['prev_line'][i:] + '\n')
 
     state['prev_line'] = line
   
   for i_line, input_line in enumerate(sass.splitlines()):
     if input_line.strip():
-      parse_line(input_line, i_line+1, state)
-  parse_line('\n', i_line+2, state)
+      parse_line(input_line, i_line, state)
+  parse_line('\n', i_line+1, state)
 
   return output_buffer.getvalue()
 
