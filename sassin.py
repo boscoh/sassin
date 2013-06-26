@@ -17,11 +17,10 @@ def compile(sass, source_fname=''):
   output_buffer = StringIO.StringIO()
 
   state = {
-    'indent_mark': 0,
-    'prev_indent': 0,
     'prev_line': '',
     'nested_blocks': 0,
     'line_buffer': '',
+    'prev_indents': None,
   }
   
   # create a separate funtion for parsing the line so that we can call it again after the loop terminates
@@ -41,17 +40,10 @@ def compile(sass, source_fname=''):
 
     indent = len(line) - len(line.lstrip())
    
-    # make sure we support multi-space indent as long as indent is consistent
-    if indent and not state['indent_mark']:
-      state['indent_mark'] = indent
-  
-    if state['indent_mark']:
-      check = indent % state['indent_mark']
-      if 0 < check < state['indent_mark']:
-        raise ValueError('Error: indentation not multiple of first indent, at {0}:{1}'.format(i_line, source_fname))
-      indent /= state['indent_mark']
-  
-    if indent == state['prev_indent']:
+    if state['prev_indents'] is None:
+      state['prev_indents'] = [indent]
+      
+    if indent == sum(state['prev_indents']):
       if '@import' in state['prev_line']:
         import_fname = state['prev_line'].split()[1]
         if import_fname.startswith('"'):
@@ -61,28 +53,32 @@ def compile(sass, source_fname=''):
         state['prev_line'] = compile_from_file(import_fname)
       elif not is_comment and state['prev_line']:
         state['prev_line'] += ';'
-    elif indent > state['prev_indent']:
+    elif indent > sum(state['prev_indents']):
       # new indentation is greater than previous, we just entered a new block
       state['prev_line'] +=  ' {'
       state['nested_blocks'] += 1
-    else:
-      # indentation is reset, we exited a block
-      block_diff = state['prev_indent'] - indent
-      if not is_comment and state['prev_line']:
-        state['prev_line'] += ';'
-      state['prev_line'] += ' }' * block_diff
-      state['nested_blocks'] -= block_diff
+      block_diff = indent - sum(state['prev_indents'])
+      state['prev_indents'].append(block_diff)
+    else: 
+      # indent < sum(state['prev_indents'])
+      while indent < sum(state['prev_indents']):
+        block_diff = state['prev_indents'].pop()
+        if sum(state['prev_indents']) < indent:
+          raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
+        if not is_comment and state['prev_line']:
+          state['prev_line'] += ';'
+        state['prev_line'] += ' }' 
+        state['nested_blocks'] -= 1
 
     if state['prev_line']:
       output_buffer.write(state['prev_line'] + '\n')
 
-    state['prev_indent'] = indent
     state['prev_line'] = line
   
   for i_line, input_line in enumerate(sass.splitlines()):
     if input_line.strip():
-      parse_line(input_line, i_line, state)
-  parse_line('\n', i_line+1, state) # parse the last line stored in prev_line buffer
+      parse_line(input_line, i_line+1, state)
+  parse_line('\n', i_line+2, state) # parse the last line stored in prev_line buffer
 
   return output_buffer.getvalue()
 
