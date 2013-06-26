@@ -18,9 +18,9 @@ def compile(sass, source_fname=''):
 
   state = {
     'prev_line': '',
-    'nested_blocks': 0,
     'line_buffer': '',
-    'prev_indents': None,
+    'first_indent': None,
+    'prev_indents': [],
   }
   
   # create a separate funtion for parsing the line so that we can call it again after the loop terminates
@@ -39,10 +39,10 @@ def compile(sass, source_fname=''):
         state['prev_line'] = text + ' */'
 
     indent = len(line) - len(line.lstrip())
-   
-    if state['prev_indents'] is None:
-      state['prev_indents'] = [indent]
-      
+    if state['first_indent'] is None:
+      state['first_indent'] = indent
+    indent -= state['first_indent']  
+
     if indent == sum(state['prev_indents']):
       if '@import' in state['prev_line']:
         import_fname = state['prev_line'].split()[1]
@@ -56,29 +56,29 @@ def compile(sass, source_fname=''):
     elif indent > sum(state['prev_indents']):
       # new indentation is greater than previous, we just entered a new block
       state['prev_line'] +=  ' {'
-      state['nested_blocks'] += 1
       block_diff = indent - sum(state['prev_indents'])
       state['prev_indents'].append(block_diff)
     else: 
-      # indent < sum(state['prev_indents'])
-      while indent < sum(state['prev_indents']):
-        block_diff = state['prev_indents'].pop()
+      # indentation is shorter than previous: exit out of block
+      if not is_comment and state['prev_line']:
+        state['prev_line'] += ';'
+      while state['prev_indents'] != [] \
+          and indent < sum(state['prev_indents']):
         if sum(state['prev_indents']) < indent:
           raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
-        if not is_comment and state['prev_line']:
-          state['prev_line'] += ';'
+        state['prev_indents'].pop()
         state['prev_line'] += ' }' 
-        state['nested_blocks'] -= 1
 
     if state['prev_line']:
-      output_buffer.write(state['prev_line'] + '\n')
+      i = state['first_indent']
+      output_buffer.write(state['prev_line'][i:] + '\n')
 
     state['prev_line'] = line
   
   for i_line, input_line in enumerate(sass.splitlines()):
     if input_line.strip():
       parse_line(input_line, i_line+1, state)
-  parse_line('\n', i_line+2, state) # parse the last line stored in prev_line buffer
+  parse_line('\n', i_line+2, state)
 
   return output_buffer.getvalue()
 
