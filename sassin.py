@@ -25,9 +25,11 @@ def compile(sass, source_fname=''):
   
   # create a separate funtion for parsing the line so that we can call it again after the loop terminates
   def parse_line(line, i_line, state):
-    line = state['line_buffer'] + line.rstrip() # remove EOL character
+    line = line.rstrip() # remove EOL character
+    if state['line_buffer']:
+      line = state['line_buffer'] + line.lstrip()
     if line and line[-1] == ',':
-      state['line_buffer'] = line[:-1] + ' '
+      state['line_buffer'] = line + ' '
       return
     else:
       state['line_buffer'] = ''
