@@ -38,6 +38,7 @@ def compile(sass, source_fname=''):
       if not text.endswith('*/'):
         state['prev_line'] = text + ' */'
 
+    # mark indents from first non-whitespace column
     indent = len(line) - len(line.lstrip())
     if state['first_indent'] is None:
       state['first_indent'] = indent
@@ -55,14 +56,14 @@ def compile(sass, source_fname=''):
         state['prev_line'] += ';'
     elif indent > sum(state['prev_indents']):
       # new indentation is greater than previous, we just entered a new block
-      state['prev_line'] +=  ' {'
+      state['prev_line'] += ' {'
       block_diff = indent - sum(state['prev_indents'])
       state['prev_indents'].append(block_diff)
     else: 
       # indentation is shorter than previous: exit out of block
       if not is_comment and state['prev_line']:
         state['prev_line'] += ';'
-      # pull off prev_indents one-by-one and add a }
+      # pull off prev_indents one-by-one and add }
       while len(state['prev_indents']) and indent < sum(state['prev_indents']):
         state['prev_indents'].pop()
         if sum(state['prev_indents']) < indent:
@@ -73,7 +74,7 @@ def compile(sass, source_fname=''):
       i = state['first_indent']
       left_padding = state['prev_line'][:i]
       if left_padding.strip():
-          raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
+        raise ValueError('Error: indentation mismatch at {0}:{1}'.format(source_fname, i_line))
       output_buffer.write(state['prev_line'][i:] + '\n')
 
     state['prev_line'] = line
@@ -81,6 +82,7 @@ def compile(sass, source_fname=''):
   for i_line, input_line in enumerate(sass.splitlines()):
     if input_line.strip():
       parse_line(input_line, i_line, state)
+  # need this last pass to flush last 'prev_line'
   parse_line('\n', i_line+1, state)
 
   return output_buffer.getvalue()
