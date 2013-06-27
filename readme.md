@@ -15,19 +15,21 @@ SASS-indented-syntax files are recognized by a `.sass` extension.
 
 ## What is the SASS-indented-syntax?
 
-Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for stylesheets into CSS, known as the original SASS format. For clarity, let's call it the SASS-indented-syntax.
+Okay this gets confusing: there is a Ruby program called [SASS](http://sass-lang.com/) which used to compile an indented syntax for CSS, known also as SASS. However, SASS (the program) found itself losing market share to LESS, and thus, introduced the SCSS format, another curly braced syntax to compete with LESS. So SASS (the program) deprecated SASS (the old format) and focus on SCSS (the new format). 
 
-However, SASS (the program) found that it was losing market share to LESS, and thus, introduced the SCSS format, which has a curly braced syntax to appear more like LESS. So SASS (the program) decided to deprecate SASS (the syntax) and focus on SCSS (the format). 
+For clarity, let's call the old SASS format, the SASS-indented-syntax.
 
-Nevertheless, the SASS-indented-syntax is a format that fits well with other space-indented formats such as YAML, HAML, and of course, Python. The good news is that there are a few Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of these modules can actually compile the SASS-indented-syntax format, even though confusingly some of these libraries also use SASS in their name.
+Nevertheless, the SASS-indented-syntax is a format that fits well with other space-indented formats such as YAML, HAML, and of course, Python. The good news is that there are Python SCSS libraries (PySCSS, libsass, SASS). The bad news is that none of them compile the SASS-indented-syntax format, even though  some of these libraries confusingly call themselves *SASS.
 
 What to do if you're a Pythonista who wants to SASS?
 
+This is where `sassin` comes in. `sassin` compiles SASS-indented-syntax into SCSS, which is rather straightforward: it wraps indented spaces with curly braces, and adds semicolons to the end of fields. This is sufficient to turn SASS-indented-syntax into SCSS, which any SCSS compiler can read, and thus future-proofs the SASS-indented-syntax.
+
+`sassin` is based on the [RapydCSS](https://bitbucket.org/pyjeon/rapydcss) compiler, but with better consistency with the official [SASS-indented-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html), including comments, improved indentation, error checking, and tweaked to work with projects such as HAMLPY.
+
+
+
 ## Basic SASS-indented-syntax compilation
-
-`sassin` essentially compiles SASS-indented-syntax into SCSS. It is based on the [RapydCSS](https://bitbucket.org/pyjeon/rapydcss) compiler, but with comments, more consistency with the official [SASS-indented-syntax](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html), improved indentation, error checking, and tweaked to work better with other Python projects, such as HAMLPY.
-
-The essential compilation provided by `sassin` is straightforward: it wraps indented spaces with curly braces; and adds semicolons at the end of fields. This is sufficient to turn `sassin` into valid SCSS, and thus future-proofs the SASS-indented-syntax from deprecation.
 
 If your SASS-indented-syntax file does not use any of the bells and whistles below (variables, mixins, nesting, etc.), then this simple compilation step will give you valid CSS.
 
@@ -163,7 +165,7 @@ Just beware that `/` will be intrepreted as a division expression, so if `/` app
 
 ### Mix-ins with arguments
 
-Mix-ins that group common elements, and can take arguments, which are prefaced by '@':
+Mix-ins that group common elements, and can take arguments, which are prefaced by `@`:
 
     @mixin left($dist)
       float: left
