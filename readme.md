@@ -3,6 +3,33 @@
 
 `sassin` compiles SASS-indented-syntax into CSS. This is a beautiful space-indented format, similar to Javascript's [Stylus](http://learnboost.github.io/stylus/), but `sassin` works entirely in the Python ecosystem.
 
+`sassin` turns this highly modifiable and easy-to-read fragment:
+
+    $width: 900px
+
+    @mixin grey-border($fr)
+      border: 1px solid rgb($fr*256, $fr*256, $fr*256)
+    
+    #sidebar
+      width: $width/3
+      @include grey-border(0.5)
+    
+    #main
+      width: $width/3*2
+      @include grey-border(0.2)
+
+Into CSS with its inscrutable hard-coded values:
+
+    #sidebar {
+      width: 300px;
+      border: 1px solid #808080;
+    }
+
+    #main {
+      width: 600px;
+      border: 1px solid #333333;
+    }
+
 ## Installation
 
     pip install sassin

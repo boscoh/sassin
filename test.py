@@ -59,6 +59,19 @@ body {
     test_lines = splitlines(test_css)
     eq_(out_lines, test_lines)
 
+  def test_import(self):
+    in_sass = """
+@import test-import.sass
+    """
+    out_css = sassin.compile(in_sass)
+    out_lines = splitlines(out_css)
+    test_css = """
+body {
+  background-color: #EEE; }
+    """
+    test_lines = splitlines(test_css)
+    eq_(out_lines, test_lines)
+
   @raises(ValueError)
   def test_exception_for_misaligned_identation(self):
       in_sass = """
@@ -79,7 +92,7 @@ body {
       """
       out_css = sassin.compile(in_sass)
 
-  # TODO: test imports
+
 
 
 if __name__ == '__main__':
