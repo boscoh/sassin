@@ -11,7 +11,7 @@ Docs at http://github.com/boscoh/sassin.
 
 setup(
     name='sassin',
-    version='0.9',
+    version='0.9.1',
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/sassin',
