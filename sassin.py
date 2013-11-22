@@ -1,5 +1,6 @@
-# forked from rapydcss https://bitbucket.org/pyjeon/rapydcss
+# sassin (c) 2013 Bosco Ho
 # Portion (C) 2012  Alexander Tsepkov
+# forked from rapydcss https://bitbucket.org/pyjeon/rapydcss
 
 import os
 import StringIO

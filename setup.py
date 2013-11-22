@@ -20,5 +20,5 @@ setup(
     license='GPLv3',
     install_requires=['pyscss'],
     py_modules=['sassin',],
-    scripts=['sassin'],
+    scripts=['scripts/sassin'],
 )
