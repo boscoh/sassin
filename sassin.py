@@ -9,7 +9,7 @@ import StringIO
 try:
   import scss
   if 'Scss' in dir(scss):
-    compile_scss = scss.Scss(scss_opts={'compress':False}).compile
+    compile_scss = scss.Scss(scss_opts={'style':'expanded'}).compile
 except:
   compile_scss = None
 
