@@ -57,9 +57,10 @@ def compile(sass, source_fname=''):
         import_fname = state['prev_line'].split()[1]
         if import_fname.startswith('"'):
           import_fname = import_fname[1:-1]
-        if not os.path.isfile(import_fname):
+
+        if not os.path.isfile(os.path.join(os.path.dirname(source_fname), import_fname)):
           raise IOError('Error: @import {0} not found at {1}:{2}'.format(import_fname, source_fname, i_line))
-        state['prev_line'] = compile_from_file(import_fname)
+        state['prev_line'] = compile_from_file(os.path.join(os.path.dirname(source_fname), import_fname))
 
       elif not is_comment and state['prev_line']:
         state['prev_line'] += ';'
@@ -111,6 +112,7 @@ def compile_with_scss(sass):
   scss_text = compile(sass)
   return compile_scss(scss_text)
 
-
-
-
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+f = 'test/data/sass/test.sass'
+scss = compile_from_file(os.path.join(PROJECT_PATH, f))
+print scss
