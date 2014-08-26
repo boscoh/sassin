@@ -111,8 +111,3 @@ def compile_with_scss(sass):
     raise "Error: couldn't load a SCSS compiler"
   scss_text = compile(sass)
   return compile_scss(scss_text)
-
-PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-f = 'test/data/sass/test.sass'
-scss = compile_from_file(os.path.join(PROJECT_PATH, f))
-print scss
