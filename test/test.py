@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 import unittest
 from nose.tools import eq_, raises
 import sassin
@@ -92,7 +95,11 @@ body {
       """
       out_css = sassin.compile(in_sass)
 
-
+  def test_import_with_path(self):
+    PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+    f = 'data/sass/test.sass'
+    print "now"
+    scss = sassin.compile_from_file(os.path.join(PROJECT_PATH, f))
 
 
 if __name__ == '__main__':

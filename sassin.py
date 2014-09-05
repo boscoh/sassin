@@ -57,9 +57,14 @@ def compile(sass, source_fname=''):
         import_fname = state['prev_line'].split()[1]
         if import_fname.startswith('"'):
           import_fname = import_fname[1:-1]
+        dirname = os.path.dirname(source_fname)
+        print "(%s),(%s),(%s)" % (dirname, import_fname, os.getcwd())
+        if dirname:
+          import_fname = os.path.join(dirname, import_fname) 
+        print "(%s),(%s),(%s)" % (dirname, import_fname, os.getcwd())
         if not os.path.isfile(import_fname):
           raise IOError('Error: @import {0} not found at {1}:{2}'.format(import_fname, source_fname, i_line))
-        state['prev_line'] = compile_from_file(import_fname)
+        state['prev_line'] = compile_from_file(os.path.join(os.path.dirname(source_fname), import_fname))
 
       elif not is_comment and state['prev_line']:
         state['prev_line'] += ';'
@@ -110,7 +115,3 @@ def compile_with_scss(sass):
     raise "Error: couldn't load a SCSS compiler"
   scss_text = compile(sass)
   return compile_scss(scss_text)
-
-
-
-
