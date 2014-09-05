@@ -98,7 +98,7 @@ body {
   def test_import_with_path(self):
     PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
     f = 'data/sass/test.sass'
-    print "now"
+
     scss = sassin.compile_from_file(os.path.join(PROJECT_PATH, f))
 
 
