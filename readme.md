@@ -67,7 +67,7 @@ If your SASS-indented-syntax file does not use any of the bells and whistles bel
       width: 500px
     '''
 
-    print sassin.compile(s)
+    print sassin.compile_with_scss(s)
 
 Some of the features that work in this basic mode are:
 
