@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='sassin',
-    version='0.9.2',
+    version='0.9.3',
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/sassin',
